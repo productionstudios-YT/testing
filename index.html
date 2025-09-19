@@ -1,68 +1,309 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Assistant Website</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProductiveBot - Your AI Assistant</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            position: relative;
+        }
+
+        header {
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            color: #6e8efb;
+            background: white;
+            padding: 10px;
+            border-radius: 50%;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            color: white;
+        }
+
+        .feature {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 15px;
+        }
+
+        .feature i {
+            font-size: 2.5rem;
+            color: #6e8efb;
+            background: white;
+            padding: 15px;
+            border-radius: 50%;
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-text h3 {
+            font-weight: 600;
+            margin-bottom: 5px;
+            font-size: 1.2rem;
+        }
+
+        .feature-text p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+        }
+
+        .chat-container {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            margin-bottom: 20px;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-placeholder {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #666;
+            font-size: 1.2rem;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .instructions {
+            padding: 1.5rem;
+            text-align: center;
+            color: #555;
+            background-color: #f9f9f9;
+            border-top: 1px solid #eee;
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-top: auto;
+        }
+
+        .instruction-highlight {
+            color: #6e8efb;
+            font-weight: bold;
+        }
+
+        .icon-reference {
+            display: inline-block;
+            background: #6e8efb;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            margin: 0 5px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1rem;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.2);
+            font-size: 0.9rem;
+            margin-top: auto;
+        }
+
+        footer a {
+            color: #ffde59;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* ChatBot Widget Styling */
+        .OpenWidgetContainer {
+            position: fixed !important;
+            top: 50% !important;
+            right: 20px !important;
+            transform: translateY(-50%) !important;
+            width: 70px !important;
+            height: 70px !important;
+            border: none !important;
+            z-index: 1000 !important;
+        }
+
+        .OpenWidgetContainer iframe {
+            width: 100% !important;
+            height: 100% !important;
+            border: none !important;
+            border-radius: 50% !important;
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 1rem;
+            }
+
+            .logo {
+                font-size: 1.4rem;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+            }
+
+            .OpenWidgetContainer {
+                bottom: 20px !important;
+                top: auto !important;
+                right: 20px !important;
+                transform: none !important;
+            }
+        }
+    </style>
+
+    <!-- Start of ChatBot (www.chatbot.com) code -->
+    <script>
+      window.__ow = window.__ow || {};
+      window.__ow.organizationId = "1915c441-fb76-4ab7-8b4f-872e0a543235";
+      window.__ow.template_id = "92b847b9-5162-47cf-8d46-e81ae67727d8";
+      window.__ow.integration_name = "manual_settings";
+      window.__ow.product_name = "chatbot";
+      ;(function(n,t,c){function i(n){return e._h?e._h.apply(null,n):e._q.push(n)}var e={_q:[],_h:null,_v:"2.0",on:function(){i(["on",c.call(arguments)])},once:function(){i(["once",c.call(arguments)])},off:function(){i(["off",c.call(arguments)])},get:function(){if(!e._h)throw new Error("[OpenWidget] You can't use getters before load.");return i(["get",c.call(arguments)])},call:function(){i(["call",c.call(arguments)])},init:function(){var n=t.createElement("script");n.async=!0,n.type="text/javascript",n.src="https://cdn.openwidget.com/openwidget.js",t.head.appendChild(n)}};!n.__ow.asyncInit&&e.init(),n.OpenWidget=n.OpenWidget||e}(window,document,[].slice))
+    </script>
+    <noscript>You need to <a href="https://www.chatbot.com/help/chat-widget/enable-javascript-in-your-browser/" rel="noopener nofollow">enable JavaScript</a> in order to use the AI chatbot tool powered by <a href="https://www.chatbot.com/" rel="noopener nofollow" target="_blank">ChatBot</a></noscript>
+    <!-- End of ChatBot code -->
 </head>
 <body>
-  <header>
-    <div class="container">
-      <h1>AI Assistant</h1>
-      <nav>
-        <ul>
-          <li><a href="#">Home</a></li>
-          <li><a href="#">Features</a></li>
-          <li><a href="#">About</a></li>
-          <li><a href="#">Contact</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
+    <header>
+        <div class="logo">
+            <i class="fas fa-robot"></i>
+            <span>ProductiveBot - Your AI Assistant</span>
+        </div>
+    </header>
 
-  <section class="hero">
-    <div class="container">
-      <h2>Your Personal AI Assistant</h2>
-      <p>Get instant answers and smart support anytime, anywhere.</p>
-      <a href="#" class="btn">Get Started</a>
-    </div>
-  </section>
+    <div class="main-content">
+        <div class="features">
+            <div class="feature">
+                <i class="fas fa-lightbulb"></i>
+                <div class="feature-text">
+                    <h3>Smart Answers</h3>
+                    <p>AI-powered responses to your questions</p>
+                </div>
+            </div>
+            <div class="feature">
+                <i class="fas fa-clock"></i>
+                <div class="feature-text">
+                    <h3>24/7 Available</h3>
+                    <p>Always ready to assist you</p>
+                </div>
+            </div>
+            <div class="feature">
+                <i class="fas fa-lock"></i>
+                <div class="feature-text">
+                    <h3>Transparent</h3>
+                    <p>Conversations may be reviewed for security or training</p>
+                </div>
+            </div>
+            <div class="feature">
+                <i class="fas fa-bolt"></i>
+                <div class="feature-text">
+                    <h3>Fast Responses</h3>
+                    <p>Get answers in seconds</p>
+                </div>
+            </div>
+        </div>
 
-  <section class="features">
-    <div class="container">
-      <div class="feature">
-        <i class="fas fa-comments"></i>
-        <h3>Instant Chat</h3>
-        <p>Talk to your AI assistant anytime with real-time responses.</p>
-      </div>
-      <div class="feature">
-        <i class="fas fa-lightbulb"></i>
-        <h3>Smart Suggestions</h3>
-        <p>Get useful tips and recommendations tailored to your needs.</p>
-      </div>
-      <div class="feature">
-        <i class="fas fa-lock"></i>
-        <h3>Secure</h3>
-        <p>Your data is protected with enterprise-grade security.</p>
-      </div>
+        <div class="chat-container">
+            <div class="chat-placeholder">
+                <p>Click the <span class="icon-reference"><i class="fas fa-comment"></i> chat icon</span> on the right to start a conversation with our AI assistant</p>
+            </div>
+        </div>
     </div>
-  </section>
 
-  <section class="chatbot-container">
-    <div class="container">
-      <h2>Try the AI Chatbot</h2>
-      <div id="chatbot"></div>
+    <div class="instructions">
+        <p><span class="instruction-highlight">Type your questions in the chat window by clicking the icon on the right. Our AI assistant is here to help.</span></p>
     </div>
-  </section>
 
-  <footer>
-    <div class="container">
-      <p>&copy; 2024 AI Assistant. All rights reserved.</p>
-    </div>
-  </footer>
+    <footer>
+        <p>&copy; <a href="https://ayaan-trehaan.my.canva.site/mrproductive-knows-stuff-com" target="_blank">Productive Web</a>. All rights reserved.</p>
+    </footer>
 
-  <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Modify the chatbot widget to appear in the middle right
+            function modifyChatbotWidget() {
+                const chatbotContainer = document.querySelector('.OpenWidgetContainer');
+                if (chatbotContainer) {
+                    chatbotContainer.style.position = 'fixed';
+                    chatbotContainer.style.top = '50%';
+                    chatbotContainer.style.right = '20px';
+                    chatbotContainer.style.transform = 'translateY(-50%)';
+                    chatbotContainer.style.width = '70px';
+                    chatbotContainer.style.height = '70px';
+                    chatbotContainer.style.border = 'none';
+                    chatbotContainer.style.zIndex = '1000';
+
+                    return true;
+                }
+                return false;
+            }
+
+            // Try to modify the widget, retry if not yet loaded
+            if (!modifyChatbotWidget()) {
+                const interval = setInterval(function() {
+                    if (modifyChatbotWidget()) {
+                        clearInterval(interval);
+                    }
+                }, 500);
+            }
+        });
+    </script>
 </body>
 </html>
